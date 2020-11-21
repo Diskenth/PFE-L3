@@ -1,0 +1,16 @@
+<?php
+
+
+
+Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
+
+Auth::routes(['verify' => true]);
+
+Route::get('/stream', 'HomeController@stream')->name('stream')->middleware('verified');
+
+Route::group( ['middleware' => ['auth']], function() {
+    Route::resource('courses', 'CourseController');
+    Route::resource('roles', 'RoleController');
+    Route::resource('lessons', 'LessonController')->except('create');
+    Route::get('/lessons/create/{course}', 'LessonController@create')->name('lessons.create');
+});
